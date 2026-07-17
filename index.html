@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nezam Kutubi — Android Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1115;
+    --surface:#171A21;
+    --surface-2:#1D212B;
+    --line:#2A2F3A;
+    --text:#E8EAED;
+    --muted:#8B92A5;
+    --green:#7CB88F;
+    --amber:#E0A458;
+    --pink:#C58FC0;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    --sans:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+
+  /* ---------- Editor Chrome ---------- */
+  .editor{
+    max-width:1180px;
+    margin:24px auto;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,0.35);
+  }
+  .titlebar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    background:var(--surface-2);
+    border-bottom:1px solid var(--line);
+  }
+  .dot{width:11px;height:11px;border-radius:50%;}
+  .dot.r{background:#E5675F;}
+  .dot.y{background:#E0C15C;}
+  .dot.g{background:#63C368;}
+  .titlebar-path{
+    margin-left:12px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--muted);
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns:220px 1fr;
+  }
+
+  /* ---------- Sidebar / project explorer ---------- */
+  .sidebar{
+    background:var(--surface);
+    border-right:1px solid var(--line);
+    padding:20px 0;
+  }
+  .sidebar-label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    text-transform:uppercase;
+    padding:0 18px 10px;
+  }
+  .file{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 18px;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--muted);
+    text-decoration:none;
+    border-left:2px solid transparent;
+    cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .file:hover{background:var(--surface-2); color:var(--text);}
+  .file.active{color:var(--green); border-left-color:var(--green); background:var(--surface-2);}
+  .file .ext{color:var(--amber);}
+
+  /* ---------- Main content ---------- */
+  .pane{padding:0;}
+  section{
+    padding:64px 48px;
+    border-bottom:1px solid var(--line);
+    scroll-margin-top:16px;
+  }
+  section:last-child{border-bottom:none;}
+
+  .lineno{
+    font-family:var(--mono);
+    font-size:12px;
+    color:#454B58;
+    user-select:none;
+    display:inline-block;
+    width:28px;
+  }
+
+  .kw{color:var(--pink);}
+  .fn{color:var(--green);}
+  .str{color:var(--amber);}
+  .cmt{color:var(--muted); font-style:italic;}
+
+  /* Hero */
+  .hero h1{
+    font-family:var(--mono);
+    font-weight:800;
+    font-size:clamp(32px, 5vw, 52px);
+    line-height:1.15;
+    margin-top:18px;
+  }
+  .hero .role{
+    font-family:var(--mono);
+    color:var(--green);
+    font-size:clamp(16px, 2.5vw, 20px);
+    margin-top:10px;
+  }
+  .hero p.tag{
+    margin-top:18px;
+    max-width:560px;
+    color:var(--muted);
+    font-size:16px;
+  }
+  .cta-row{
+    margin-top:32px;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:13.5px;
+    padding:12px 20px;
+    border-radius:6px;
+    text-decoration:none;
+    border:1px solid var(--line);
+    transition:transform .15s, border-color .15s;
+    display:inline-block;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn.primary{background:var(--green); color:#0F1115; border-color:var(--green); font-weight:700;}
+  .btn.ghost{color:var(--text); border-color:var(--line);}
+  .btn.ghost:hover{border-color:var(--green); color:var(--green);}
+
+  /* Section headers */
+  .sec-head{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    margin-bottom:26px;
+  }
+  .sec-head .kw{text-transform:none;}
+
+  /* About */
+  .about-body{max-width:640px; color:var(--muted); font-size:15.5px;}
+  .about-body strong{color:var(--text); font-weight:600;}
+
+  /* Skills as gradle deps */
+  .gradle-block{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:24px 26px;
+    font-family:var(--mono);
+    font-size:13.5px;
+    overflow-x:auto;
+    max-width:640px;
+  }
+  .gradle-block .row{white-space:nowrap; padding:3px 0;}
+  .indent{padding-left:20px;}
+
+  /* Projects */
+  .project-card{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:30px;
+    max-width:720px;
+  }
+  .project-card .status{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--amber);
+    border:1px solid var(--amber);
+    padding:3px 9px;
+    border-radius:20px;
+    margin-bottom:14px;
+  }
+  .project-card h3{font-size:22px; margin-bottom:8px;}
+  .project-card p{color:var(--muted); font-size:14.5px; margin-bottom:18px; max-width:520px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;}
+  .chip{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--green);
+    background:rgba(124,184,143,0.1);
+    border:1px solid rgba(124,184,143,0.3);
+    padding:4px 10px;
+    border-radius:5px;
+  }
+  .project-links a{
+    font-family:var(--mono);
+    font-size:13px;
+    margin-right:18px;
+    color:var(--text);
+    border-bottom:1px solid var(--line);
+    padding-bottom:2px;
+  }
+  .project-links a:hover{color:var(--green); border-color:var(--green);}
+
+  /* Contact */
+  .contact-grid{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-top:22px;
+  }
+  .contact-card{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:16px 20px;
+    font-family:var(--mono);
+    font-size:13.5px;
+    min-width:200px;
+  }
+  .contact-card .k{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px;}
+  .contact-card a{color:var(--green); text-decoration:none;}
+  .contact-card a:hover{text-decoration:underline;}
+
+  footer{
+    text-align:center;
+    padding:22px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:#454B58;
+  }
+
+  @media (max-width:760px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{
+      display:flex;
+      overflow-x:auto;
+      padding:12px 8px;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+    }
+    .sidebar-label{display:none;}
+    .file{border-left:none; border-bottom:2px solid transparent; white-space:nowrap;}
+    .file.active{border-left:none; border-bottom-color:var(--green);}
+    section{padding:44px 22px;}
+  }
+
+  /* focus visibility */
+  a:focus-visible, .file:focus-visible{outline:2px solid var(--green); outline-offset:2px;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="editor">
+  <div class="titlebar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="titlebar-path">nezam-kutubi/portfolio — main</span>
+  </div>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Section navigation">
+      <div class="sidebar-label">Project</div>
+      <a class="file active" data-target="hero" href="#hero">📄 Home<span class="ext">.kt</span></a>
+      <a class="file" data-target="about" href="#about">📄 About<span class="ext">.kt</span></a>
+      <a class="file" data-target="skills" href="#skills">⚙️ build<span class="ext">.gradle</span></a>
+      <a class="file" data-target="projects" href="#projects">📄 Projects<span class="ext">.kt</span></a>
+      <a class="file" data-target="contact" href="#contact">📄 Contact<span class="ext">.kt</span></a>
+    </nav>
+
+    <div class="pane">
+
+      <section id="hero" class="hero">
+        <span class="lineno">01</span><span class="cmt">// Home.kt</span><br>
+        <span class="lineno">02</span><span class="kw">class</span> <span class="fn">Nezam Kutubi</span>
+        <h1>Building Android apps<br>that ship.</h1>
+        <div class="role">Android Developer · Kotlin · Jetpack Compose</div>
+        <p class="tag">
+          I design and build native Android apps from scratch — architecture, local
+          data, syncing, and Play Store launch — currently deep in a Kotlin/Compose
+          migration after years of Java and XML.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#projects">View projects</a>
+          <a class="btn ghost" href="#contact">Get in touch</a>
+        </div>
+      </section>
+
+      <section id="about">
+        <div class="sec-head"><span class="kw">fun</span> <span class="fn">about</span>()</div>
+        <div class="about-body">
+          <p>
+            I got my start writing <strong>Java and XML</strong> for Android the
+            self-directed way — building real projects, hitting real bugs, and
+            learning the platform from the inside. That foundation is now carrying
+            me through a move to <strong>Kotlin and Jetpack Compose</strong>, with
+            modern architecture: MVVM, Hilt for DI, and Coroutines/Flow for async work.
+          </p>
+          <p style="margin-top:14px;">
+            I care about apps that are genuinely useful — not just technically sound.
+            My current focus is combining solid Android fundamentals with practical
+            monetization strategy (AdMob) to build apps that are sustainable to run.
+          </p>
+        </div>
+      </section>
+
+      <section id="skills">
+        <div class="sec-head"><span class="kw">dependencies</span> {}</div>
+        <div class="gradle-block">
+          <div class="row"><span class="fn">implementation</span> <span class="str">"kotlin:core"</span></div>
+          <div class="row"><span class="fn">implementation</span> <span class="str">"androidx.compose:ui"</span></div>
+          <div class="row"><span class="fn">implementation</span> <span class="str">"androidx.room:room-runtime"</span></div>
+          <div class="row"><span class="fn">implementation</span> <span class="str">"com.google.dagger:hilt-android"</span></div>
+          <div class="row"><span class="fn">implementation</span> <span class="str">"kotlinx-coroutines:core"</span></div>
+          <div class="row"><span class="fn">implementation</span> <span class="str">"com.google.android.gms:play-services-ads"</span></div>
+          <div class="row"><span class="fn">implementation</span> <span class="str">"architecture:mvvm"</span></div>
+          <div class="row cmt">&nbsp;&nbsp;&nbsp;&nbsp;// legacy but load-bearing</div>
+          <div class="row"><span class="fn">implementation</span> <span class="str">"java:xml-views"</span></div>
+        </div>
+      </section>
+
+      <section id="projects">
+        <div class="sec-head"><span class="kw">val</span> <span class="fn">projects</span> = listOf(...)</div>
+        <div class="project-card">
+          <span class="status">● in closed testing</span>
+          <h3>NarcoGuide</h3>
+          <p>
+            An Android reference app covering Bangladesh's narcotics control laws,
+            penalties, and rehabilitation resources — built to be a clear, accessible
+            resource rather than a wall of legal text.
+          </p>
+          <div class="chips">
+            <span class="chip">Kotlin</span>
+            <span class="chip">Jetpack Compose</span>
+            <span class="chip">Room DB</span>
+            <span class="chip">GitHub-based content sync</span>
+            <span class="chip">AdMob</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/Nezam-Kutubi" target="_blank" rel="noopener">GitHub →</a>
+            <a href="#contact">Play Store listing (coming soon) →</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="sec-head"><span class="kw">fun</span> <span class="fn">contact</span>()</div>
+        <p class="about-body">Open to opportunities and collaborations. Reach out any time.</p>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="k">GitHub</div>
+            <a href="https://github.com/Nezam-Kutubi" target="_blank" rel="noopener">github.com/Nezam-Kutubi</a>
+          </div>
+          <div class="contact-card">
+            <div class="k">Email</div>
+            <a href="mailto:your.email@example.com">your.email@example.com</a>
+          </div>
+          <div class="contact-card">
+            <div class="k">LinkedIn</div>
+            <a href="#" target="_blank" rel="noopener">linkedin.com/in/your-handle</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<footer>index.html — deployed via GitHub Pages</footer>
+
+<script>
+  const files = document.querySelectorAll('.file');
+  const sections = document.querySelectorAll('section');
+
+  files.forEach(f => {
+    f.addEventListener('click', e => {
+      files.forEach(x => x.classList.remove('active'));
+      f.classList.add('active');
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        files.forEach(f => {
+          f.classList.toggle('active', f.dataset.target === id);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
