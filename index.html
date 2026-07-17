@@ -23,6 +23,10 @@
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
+  html, body{
+    max-width:100%;
+    overflow-x:hidden;
+  }
   body{
     background:var(--bg);
     color:var(--text);
@@ -64,7 +68,10 @@
   .layout{
     display:grid;
     grid-template-columns:220px 1fr;
+    min-width:0;
   }
+  .pane{min-width:0;}
+  section{min-width:0;}
 
   /* ---------- Sidebar / project explorer ---------- */
   .sidebar{
@@ -124,9 +131,10 @@
   .hero h1{
     font-family:var(--mono);
     font-weight:800;
-    font-size:clamp(32px, 5vw, 52px);
+    font-size:clamp(28px, 6vw, 52px);
     line-height:1.15;
     margin-top:18px;
+    overflow-wrap:break-word;
   }
   .hero .role{
     font-family:var(--mono);
@@ -305,7 +313,7 @@
       <section id="hero" class="hero">
         <span class="lineno">01</span><span class="cmt">// Home.kt</span><br>
         <span class="lineno">02</span><span class="kw">class</span> <span class="fn">Nezam Kutubi</span>
-        <h1>Building Android apps<br>that ship.</h1>
+        <h1>Building Android apps that ship.</h1>
         <div class="role">Android Developer · Kotlin · Jetpack Compose</div>
         <p class="tag">
           I design and build native Android apps from scratch — architecture, local
