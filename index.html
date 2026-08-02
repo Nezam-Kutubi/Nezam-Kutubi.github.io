@@ -290,12 +290,20 @@
   .proj-shot.g1{background:linear-gradient(160deg, #E9EBFF, #FBF1FF);}
   .proj-shot.g2{background:linear-gradient(160deg, #FFF1E6, #FFEAF0);}
   .proj-shot.g3{background:linear-gradient(160deg, #E7FBF3, #EAF6FF);}
+  .proj-shot.g4{background:linear-gradient(160deg, #E5F5FF, #EAF0FF);}
+  .proj-shot.g5{background:linear-gradient(160deg, #EAFBF0, #E7F9FA);}
 
   .mini-phone{
     width:150px; height:300px; background:#0F1020; border-radius:24px; padding:8px;
     box-shadow:0 16px 30px rgba(30,20,70,0.18);
   }
   .mini-phone .mscreen{width:100%; height:100%; border-radius:18px; overflow:hidden; position:relative;}
+  .mini-phone .real-shot{width:100%; height:100%; object-fit:cover; border-radius:18px; display:block;}
+
+  /* Real-screenshot project tiles (background gradients behind the phone) */
+  .proj-shot.greal1{background:linear-gradient(160deg, #FFE9E3, #FFF6E0);}
+  .proj-shot.greal2{background:linear-gradient(160deg, #E7EEFF, #F1E7FF);}
+  .proj-shot.greal3{background:linear-gradient(160deg, #FFF1DE, #FDE7F2);}
 
   /* NarcoGuide screen theme */
   .mscreen.narco{background:linear-gradient(180deg, #1B4332, #2D6A4F);}
@@ -311,6 +319,16 @@
   .mscreen.budget{background:linear-gradient(180deg, var(--coral), #FF9A85);}
   .mscreen.budget .mtitle{color:#fff; font-family:var(--display); font-weight:800; font-size:13px; padding:20px 14px 10px;}
   .mscreen.budget .mbody{background:#fff; position:absolute; top:56px; left:0; right:0; bottom:0; border-radius:14px 14px 0 0; padding:12px;}
+
+  /* WeatherNow screen theme */
+  .mscreen.weather{background:linear-gradient(180deg, var(--sky), #7CC6F7);}
+  .mscreen.weather .mtitle{color:#fff; font-family:var(--display); font-weight:800; font-size:13px; padding:20px 14px 10px;}
+  .mscreen.weather .mbody{background:#fff; position:absolute; top:56px; left:0; right:0; bottom:0; border-radius:14px 14px 0 0; padding:12px;}
+
+  /* FitTrack screen theme */
+  .mscreen.fit{background:linear-gradient(180deg, var(--mint), #6EE0B4);}
+  .mscreen.fit .mtitle{color:#fff; font-family:var(--display); font-weight:800; font-size:13px; padding:20px 14px 10px;}
+  .mscreen.fit .mbody{background:#fff; position:absolute; top:56px; left:0; right:0; bottom:0; border-radius:14px 14px 0 0; padding:12px;}
 
   .mrow{display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px solid #F2F2F8;}
   .mchip{width:24px; height:24px; border-radius:7px; flex-shrink:0;}
@@ -336,6 +354,17 @@
 
   @media (max-width:900px){ .project-grid{grid-template-columns:1fr 1fr;} }
   @media (max-width:640px){ .project-grid{grid-template-columns:1fr;} }
+
+  .project-grid.extra-projects{margin-top:26px; display:none;}
+  .see-more-wrap{display:flex; justify-content:center; margin-top:40px;}
+  .btn.see-more{
+    background:var(--surface); border:2px solid var(--indigo); color:var(--indigo);
+    padding:13px 30px; border-radius:30px; font-weight:700; font-size:14.5px;
+    cursor:pointer; transition:background .15s, color .15s, transform .15s;
+  }
+  .btn.see-more:hover{background:var(--indigo); color:#fff; transform:translateY(-2px);}
+  .btn.see-more svg{width:14px; height:14px; margin-left:6px; vertical-align:-2px; transition:transform .2s;}
+  .btn.see-more.open svg{transform:rotate(180deg);}
 
   /* ---------- About strip ---------- */
   .about{padding:80px 0;}
@@ -546,6 +575,67 @@
     <div class="project-grid">
 
       <div class="proj-card">
+        <div class="proj-shot greal1">
+          <div class="mini-phone">
+            <img class="real-shot" src="project-news-app.jpg" alt="News feed app screenshot">
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>সংবাদ প্রতিদিন — News Feed App</h3>
+          <p>A Bengali news feed UI built to practice category tabs, breaking-news cards, and list-heavy Compose layouts.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">LazyColumn</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot greal2">
+          <div class="mini-phone">
+            <img class="real-shot" src="project-bmi-app.jpg" alt="BMI calculator app screenshot">
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>BMI Calculator</h3>
+          <p>A health utility app practicing input validation, live state updates, and a custom BMI-range indicator.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">State</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot greal3">
+          <div class="mini-phone">
+            <img class="real-shot" src="project-notes-app.jpg" alt="Notes app screenshot">
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>My Notes — Notes App</h3>
+          <p>A colour-coded notes app exploring Room-backed CRUD, checklist notes, and a favourites filter.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">Room DB</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="project-grid extra-projects" id="extra-projects">
+
+      <div class="proj-card">
         <div class="proj-shot g1">
           <div class="mini-phone">
             <div class="mscreen narco">
@@ -623,9 +713,88 @@
         </div>
       </div>
 
+      <div class="proj-card">
+        <div class="proj-shot g4">
+          <div class="mini-phone">
+            <div class="mscreen weather">
+              <div class="mtitle">WeatherNow</div>
+              <div class="mbody">
+                <div class="mrow"><div class="mchip" style="background:#3FA9F5;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#7CC6F7;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#B7E1FB;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>WeatherNow — Forecast App</h3>
+          <p>A weather app built to practice Retrofit API calls, Coroutines, and mapping JSON responses to Compose UI.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Retrofit</span>
+            <span class="tag">Coroutines</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot g5">
+          <div class="mini-phone">
+            <div class="mscreen fit">
+              <div class="mtitle">FitTrack</div>
+              <div class="mbody">
+                <div class="mrow"><div class="mchip" style="background:#22C58B;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#6EE0B4;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#B3F0D8;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>FitTrack — Workout Logger</h3>
+          <p>A workout logger exploring Room-backed history tracking and simple progress charts in Compose.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Room</span>
+            <span class="tag">Compose</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="see-more-wrap">
+      <button class="btn see-more" id="see-more-btn" type="button" onclick="toggleExtraProjects()">
+        <span id="see-more-label">See More Projects</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
     </div>
   </div>
 </section>
+
+<script>
+  function toggleExtraProjects(){
+    var extra = document.getElementById('extra-projects');
+    var btn = document.getElementById('see-more-btn');
+    var label = document.getElementById('see-more-label');
+    var isOpen = extra.classList.contains('is-open');
+    if(isOpen){
+      extra.classList.remove('is-open');
+      extra.style.display = 'none';
+      btn.classList.remove('open');
+      label.textContent = 'See More Projects';
+    } else {
+      extra.classList.add('is-open');
+      extra.style.display = 'grid';
+      btn.classList.add('open');
+      label.textContent = 'See Less';
+    }
+  }
+</script>
 
 <section class="contact" id="contact">
   <div class="wrap">
