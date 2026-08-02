@@ -298,7 +298,18 @@
     box-shadow:0 16px 30px rgba(30,20,70,0.18);
   }
   .mini-phone .mscreen{width:100%; height:100%; border-radius:18px; overflow:hidden; position:relative;}
-  .mini-phone .real-shot{width:100%; height:100%; object-fit:cover; border-radius:18px; display:block;}
+
+  /* Real-screenshot mockups already include their own phone frame in the image,
+     so we just centre and scale the whole image — no extra CSS bezel around it. */
+  .real-shot-frame{
+    height:300px; display:flex; align-items:center; justify-content:center;
+  }
+  .real-shot-frame img{
+    height:100%; width:auto; max-width:100%;
+    object-fit:contain;
+    border-radius:22px;
+    filter:drop-shadow(0 16px 26px rgba(30,20,70,0.20));
+  }
 
   /* Real-screenshot project tiles (background gradients behind the phone) */
   .proj-shot.greal1{background:linear-gradient(160deg, #FFE9E3, #FFF6E0);}
@@ -576,8 +587,8 @@
 
       <div class="proj-card">
         <div class="proj-shot greal1">
-          <div class="mini-phone">
-            <img class="real-shot" src="project-news-app.jpg" alt="News feed app screenshot">
+          <div class="real-shot-frame">
+            <img src="project-news-app.png" alt="News feed app screenshot">
           </div>
         </div>
         <div class="proj-info">
@@ -595,8 +606,8 @@
 
       <div class="proj-card">
         <div class="proj-shot greal2">
-          <div class="mini-phone">
-            <img class="real-shot" src="project-bmi-app.jpg" alt="BMI calculator app screenshot">
+          <div class="real-shot-frame">
+            <img src="project-bmi-app.png" alt="BMI calculator app screenshot">
           </div>
         </div>
         <div class="proj-info">
@@ -614,8 +625,8 @@
 
       <div class="proj-card">
         <div class="proj-shot greal3">
-          <div class="mini-phone">
-            <img class="real-shot" src="project-notes-app.jpg" alt="Notes app screenshot">
+          <div class="real-shot-frame">
+            <img src="project-notes-app.png" alt="Notes app screenshot">
           </div>
         </div>
         <div class="proj-info">
