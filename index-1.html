@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nezam Kutubi — Android App Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAFF;
+    --surface:#FFFFFF;
+    --ink:#1D1B31;
+    --muted:#6B6E85;
+    --line:#ECEBF5;
+    --indigo:#4B4FE0;
+    --indigo-dark:#3739B8;
+    --coral:#FF6F59;
+    --amber:#FFB238;
+    --mint:#22C58B;
+    --sky:#3FA9F5;
+    --display:'Plus Jakarta Sans', system-ui, sans-serif;
+    --sans:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; overflow-x:hidden; max-width:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+    max-width:100%;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1160px; margin:0 auto; padding:0 24px;}
+  section{min-width:0;}
+
+  h1,h2,h3{font-family:var(--display); letter-spacing:-0.01em;}
+
+  .eyebrow{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:12.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--indigo);
+    margin-bottom:14px;
+    display:inline-block;
+  }
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,250,255,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px;
+    max-width:1160px; margin:0 auto;
+  }
+  .logo{
+    font-family:var(--display); font-weight:800; font-size:19px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{width:9px; height:9px; border-radius:50%; background:var(--coral);}
+  .nav-links{display:flex; gap:28px; font-size:14.5px; font-weight:600;}
+  .nav-links a{color:var(--muted); transition:color .15s;}
+  .nav-links a:hover{color:var(--indigo);}
+  .nav-cta{
+    background:var(--ink); color:#fff; padding:10px 20px; border-radius:30px;
+    font-size:14px; font-weight:700;
+  }
+  @media (max-width:760px){ .nav-links{display:none;} }
+
+  /* ---------- Hero / cover ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    padding:64px 0 90px;
+    background:linear-gradient(160deg, #EEF0FF 0%, #FAFAFF 55%, #FFF3E9 100%);
+  }
+  .blob{
+    position:absolute; border-radius:50%; filter:blur(60px); opacity:0.55; z-index:0;
+  }
+  .blob.b1{width:340px; height:340px; background:var(--indigo); top:-120px; right:-80px; opacity:0.25;}
+  .blob.b2{width:260px; height:260px; background:var(--amber); bottom:-80px; left:-60px; opacity:0.30;}
+  .blob.b3{width:200px; height:200px; background:var(--mint); top:180px; left:38%; opacity:0.18;}
+
+  .hero-grid{
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(30px, 4.6vw, 50px);
+    font-weight:800;
+    line-height:1.12;
+    margin-bottom:18px;
+  }
+  .hero h1 .hl{
+    background:linear-gradient(90deg, var(--indigo), var(--coral));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.lead{
+    font-size:16.5px; color:var(--muted); max-width:480px; margin-bottom:28px;
+  }
+  .btn-row{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:36px;}
+  .btn{
+    padding:13px 24px; border-radius:30px; font-weight:700; font-size:14.5px;
+    display:inline-block; transition:transform .15s, box-shadow .15s;
+  }
+  .btn.primary{background:var(--indigo); color:#fff; box-shadow:0 10px 24px rgba(75,79,224,0.35);}
+  .btn.primary:hover{transform:translateY(-2px); box-shadow:0 14px 30px rgba(75,79,224,0.42);}
+  .btn.outline{border:2px solid var(--ink); color:var(--ink);}
+  .btn.outline:hover{background:var(--ink); color:#fff;}
+
+  .stat-row{display:flex; gap:28px; flex-wrap:wrap;}
+  .stat b{display:block; font-family:var(--display); font-size:22px; font-weight:800;}
+  .stat span{font-size:12.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
+
+  /* Phone mockup */
+  .phone-stage{position:relative; display:flex; justify-content:center;}
+  .phone{
+    width:250px; height:510px;
+    background:#0F1020;
+    border-radius:38px;
+    padding:12px;
+    box-shadow:0 30px 60px rgba(30,20,70,0.28), 0 8px 20px rgba(30,20,70,0.15);
+    transform:rotate(4deg);
+    position:relative;
+  }
+  .phone .notch{
+    position:absolute; top:12px; left:50%; transform:translateX(-50%);
+    width:90px; height:22px; background:#0F1020; border-radius:0 0 14px 14px; z-index:2;
+  }
+  .phone .screen{
+    width:100%; height:100%; border-radius:28px; overflow:hidden;
+    background:linear-gradient(180deg, var(--indigo) 0%, #6C6FEA 100%);
+    position:relative; padding-top:34px;
+  }
+  .screen .statusbar{
+    display:flex; justify-content:space-between; padding:0 18px 10px; color:#fff; font-size:11px; font-weight:600;
+  }
+  .screen .app-title{color:#fff; font-family:var(--display); font-weight:800; font-size:20px; padding:6px 18px 16px;}
+  .screen .card-stack{background:#fff; border-radius:20px 20px 0 0; position:absolute; bottom:0; left:0; right:0; top:96px; padding:18px 16px;}
+  .fake-row{
+    display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #F0F0F7;
+  }
+  .fake-dot{width:34px; height:34px; border-radius:10px; flex-shrink:0;}
+  .fake-lines{flex:1;}
+  .fake-line{height:8px; border-radius:4px; background:#EDEDF6; margin-bottom:6px;}
+  .fake-line.w60{width:60%;}
+  .fake-line.w40{width:40%;}
+  .fake-cta{margin-top:16px; height:38px; border-radius:12px; background:var(--indigo); opacity:0.9;}
+
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;}
+    .phone-stage{margin-top:20px;}
+  }
+
+  /* Desk illustration (landscape hero visual) */
+  .desk-stage{width:100%; display:flex; justify-content:center;}
+  .desk-scene{
+    position:relative; width:100%; max-width:460px; aspect-ratio:4/3;
+    background:linear-gradient(180deg, #E9ECFF 0%, #FBF1FF 100%);
+    border-radius:24px; overflow:hidden;
+    box-shadow:0 24px 50px rgba(30,20,70,0.14);
+  }
+  .desk-scene .wall-window{
+    position:absolute; top:8%; right:8%; width:30%; height:34%;
+    background:linear-gradient(160deg, #BFD4FF, #FFE3C2);
+    border-radius:10px; opacity:0.9;
+  }
+  .desk-scene .shelf{
+    position:absolute; top:12%; left:8%; width:22%; height:6%;
+    background:#D8C9A3; border-radius:3px;
+  }
+  .desk-scene .plant-pot{
+    position:absolute; bottom:34%; left:6%; width:34px; height:34px; border-radius:6px; background:var(--coral);
+  }
+  .desk-scene .plant-leaf{
+    position:absolute; bottom:34%; left:9%; width:6px; height:60px; background:var(--mint); border-radius:10px;
+    transform-origin:bottom center;
+  }
+  .desk-scene .plant-leaf:nth-child(2){transform:rotate(-18deg); left:11%;}
+  .desk-scene .plant-leaf:nth-child(3){transform:rotate(16deg); left:6%;}
+
+  .desk-scene .desk-top{
+    position:absolute; bottom:0; left:0; right:0; height:16%;
+    background:linear-gradient(180deg, #C9A876, #B08E5F);
+  }
+  .desk-scene .monitor{
+    position:absolute; bottom:15%; left:50%; transform:translateX(-50%);
+    width:56%; height:46%;
+    background:#1D1B31; border-radius:10px; padding:8px;
+  }
+  .desk-scene .monitor-screen{
+    width:100%; height:100%; border-radius:5px;
+    background:linear-gradient(160deg, var(--indigo), #6C6FEA);
+    padding:12px 10px; position:relative;
+  }
+  .desk-scene .code-line{height:6px; border-radius:3px; margin-bottom:7px; background:rgba(255,255,255,0.85);}
+  .desk-scene .code-line.w1{width:70%;}
+  .desk-scene .code-line.w2{width:45%; background:var(--amber);}
+  .desk-scene .code-line.w3{width:85%;}
+  .desk-scene .code-line.w4{width:35%; background:var(--coral);}
+  .desk-scene .code-line.w5{width:60%;}
+  .desk-scene .monitor-stand{
+    position:absolute; bottom:9%; left:50%; transform:translateX(-50%);
+    width:14%; height:8%; background:#2B2940; border-radius:0 0 4px 4px;
+  }
+  .desk-scene .keyboard{
+    position:absolute; bottom:2%; left:50%; transform:translateX(-50%);
+    width:40%; height:5%; background:#EDEDF6; border-radius:5px; box-shadow:inset 0 0 0 1px #D8D8E8;
+  }
+  .desk-scene .mug{
+    position:absolute; bottom:3%; right:14%; width:26px; height:26px;
+    background:var(--coral); border-radius:5px 5px 8px 8px;
+  }
+  .desk-scene .mug::after{
+    content:''; position:absolute; right:-8px; top:6px; width:9px; height:12px;
+    border:3px solid var(--coral); border-left:none; border-radius:0 8px 8px 0;
+  }
+  .desk-scene .person{
+    position:absolute; bottom:12%; left:50%; transform:translateX(-50%);
+    width:30%; height:38%;
+  }
+  .desk-scene .person .head{
+    width:34%; aspect-ratio:1; background:#C98A5B; border-radius:50%;
+    margin:0 auto 4px;
+  }
+  .desk-scene .person .body{
+    width:100%; height:68%; background:var(--sky); border-radius:22px 22px 0 0;
+  }
+  .desk-scene .lamp{
+    position:absolute; top:6%; left:12%; width:6px; height:26%; background:#B0B0C0;
+  }
+  .desk-scene .lamp::before{
+    content:''; position:absolute; top:-6px; left:-12px; width:30px; height:14px;
+    background:var(--amber); border-radius:0 0 14px 14px;
+  }
+
+  /* ---------- Section heads ---------- */
+  .sec-head{text-align:center; max-width:600px; margin:0 auto 48px;}
+  .sec-head h2{font-size:clamp(24px, 3.4vw, 34px); font-weight:800;}
+  .sec-head p{color:var(--muted); font-size:15.5px; margin-top:10px;}
+
+  /* ---------- Services ---------- */
+  .services{padding:90px 0;}
+  .service-grid{
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:22px;
+  }
+  .service-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:20px;
+    padding:28px 24px; transition:transform .18s, box-shadow .18s;
+  }
+  .service-card:hover{transform:translateY(-6px); box-shadow:0 16px 32px rgba(30,20,70,0.08);}
+  .icon-tile{
+    width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center;
+    font-size:24px; margin-bottom:18px;
+  }
+  .icon-tile.c1{background:linear-gradient(135deg, var(--indigo), #8386F2);}
+  .icon-tile.c2{background:linear-gradient(135deg, var(--coral), #FF9A85);}
+  .icon-tile.c3{background:linear-gradient(135deg, var(--mint), #6EE0B4);}
+  .icon-tile.c4{background:linear-gradient(135deg, var(--amber), #FFD37A);}
+  .service-card h3{font-size:17px; margin-bottom:8px;}
+  .service-card p{font-size:14px; color:var(--muted);}
+
+  @media (max-width:900px){ .service-grid{grid-template-columns:repeat(2, 1fr);} }
+  @media (max-width:560px){ .service-grid{grid-template-columns:1fr;} }
+
+  /* ---------- Projects ---------- */
+  .projects{padding:90px 0; background:linear-gradient(180deg, #fff, #F7F7FF);}
+  .project-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:26px;
+  }
+  .proj-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:22px;
+    overflow:hidden; display:flex; flex-direction:column;
+  }
+  .proj-shot{
+    padding:30px 0 14px; display:flex; justify-content:center;
+    position:relative;
+  }
+  .proj-shot.g1{background:linear-gradient(160deg, #E9EBFF, #FBF1FF);}
+  .proj-shot.g2{background:linear-gradient(160deg, #FFF1E6, #FFEAF0);}
+  .proj-shot.g3{background:linear-gradient(160deg, #E7FBF3, #EAF6FF);}
+  .proj-shot.g4{background:linear-gradient(160deg, #E5F5FF, #EAF0FF);}
+  .proj-shot.g5{background:linear-gradient(160deg, #EAFBF0, #E7F9FA);}
+
+  .mini-phone{
+    width:150px; height:300px; background:#0F1020; border-radius:24px; padding:8px;
+    box-shadow:0 16px 30px rgba(30,20,70,0.18);
+  }
+  .mini-phone .mscreen{width:100%; height:100%; border-radius:18px; overflow:hidden; position:relative;}
+  .mini-phone .real-shot{width:100%; height:100%; object-fit:cover; border-radius:18px; display:block;}
+
+  /* Real-screenshot project tiles (background gradients behind the phone) */
+  .proj-shot.greal1{background:linear-gradient(160deg, #FFE9E3, #FFF6E0);}
+  .proj-shot.greal2{background:linear-gradient(160deg, #E7EEFF, #F1E7FF);}
+  .proj-shot.greal3{background:linear-gradient(160deg, #FFF1DE, #FDE7F2);}
+
+  /* NarcoGuide screen theme */
+  .mscreen.narco{background:linear-gradient(180deg, #1B4332, #2D6A4F);}
+  .mscreen.narco .mtitle{color:#fff; font-family:var(--display); font-weight:800; font-size:13px; padding:20px 14px 10px;}
+  .mscreen.narco .mbody{background:#fff; position:absolute; top:60px; left:0; right:0; bottom:0; border-radius:14px 14px 0 0; padding:12px;}
+
+  /* TaskFlow screen theme */
+  .mscreen.task{background:linear-gradient(180deg, var(--indigo), #7B7EEF);}
+  .mscreen.task .mtitle{color:#fff; font-family:var(--display); font-weight:800; font-size:13px; padding:20px 14px 10px;}
+  .mscreen.task .mbody{background:#fff; position:absolute; top:56px; left:0; right:0; bottom:0; border-radius:14px 14px 0 0; padding:12px;}
+
+  /* PocketBudget screen theme */
+  .mscreen.budget{background:linear-gradient(180deg, var(--coral), #FF9A85);}
+  .mscreen.budget .mtitle{color:#fff; font-family:var(--display); font-weight:800; font-size:13px; padding:20px 14px 10px;}
+  .mscreen.budget .mbody{background:#fff; position:absolute; top:56px; left:0; right:0; bottom:0; border-radius:14px 14px 0 0; padding:12px;}
+
+  /* WeatherNow screen theme */
+  .mscreen.weather{background:linear-gradient(180deg, var(--sky), #7CC6F7);}
+  .mscreen.weather .mtitle{color:#fff; font-family:var(--display); font-weight:800; font-size:13px; padding:20px 14px 10px;}
+  .mscreen.weather .mbody{background:#fff; position:absolute; top:56px; left:0; right:0; bottom:0; border-radius:14px 14px 0 0; padding:12px;}
+
+  /* FitTrack screen theme */
+  .mscreen.fit{background:linear-gradient(180deg, var(--mint), #6EE0B4);}
+  .mscreen.fit .mtitle{color:#fff; font-family:var(--display); font-weight:800; font-size:13px; padding:20px 14px 10px;}
+  .mscreen.fit .mbody{background:#fff; position:absolute; top:56px; left:0; right:0; bottom:0; border-radius:14px 14px 0 0; padding:12px;}
+
+  .mrow{display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px solid #F2F2F8;}
+  .mchip{width:24px; height:24px; border-radius:7px; flex-shrink:0;}
+  .mline{height:6px; border-radius:3px; background:#EDEDF6;}
+  .mline.w70{width:70%; margin-bottom:5px;}
+  .mline.w45{width:45%;}
+
+  .proj-info{padding:22px 24px 26px;}
+  .badge{
+    display:inline-block; font-size:11px; font-weight:700; padding:4px 11px; border-radius:20px;
+    margin-bottom:12px; letter-spacing:.02em;
+  }
+  .badge.live{background:rgba(34,197,139,0.12); color:var(--mint);}
+  .badge.testing{background:rgba(255,178,56,0.15); color:#B87400;}
+  .badge.demo{background:rgba(75,79,224,0.1); color:var(--indigo);}
+  .proj-info h3{font-size:18.5px; margin-bottom:8px;}
+  .proj-info p{font-size:14px; color:var(--muted); margin-bottom:14px;}
+  .tag-row{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:16px;}
+  .tag{font-size:11.5px; font-weight:600; background:#F1F1FA; color:var(--ink); padding:4px 10px; border-radius:8px;}
+  .proj-link{font-size:13.5px; font-weight:700; color:var(--indigo);}
+  .proj-link:hover{text-decoration:underline;}
+  .demo-note{font-size:11.5px; color:var(--muted); margin-top:10px; font-style:italic;}
+
+  @media (max-width:900px){ .project-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:640px){ .project-grid{grid-template-columns:1fr;} }
+
+  .project-grid.extra-projects{margin-top:26px; display:none;}
+  .see-more-wrap{display:flex; justify-content:center; margin-top:40px;}
+  .btn.see-more{
+    background:var(--surface); border:2px solid var(--indigo); color:var(--indigo);
+    padding:13px 30px; border-radius:30px; font-weight:700; font-size:14.5px;
+    cursor:pointer; transition:background .15s, color .15s, transform .15s;
+  }
+  .btn.see-more:hover{background:var(--indigo); color:#fff; transform:translateY(-2px);}
+  .btn.see-more svg{width:14px; height:14px; margin-left:6px; vertical-align:-2px; transition:transform .2s;}
+  .btn.see-more.open svg{transform:rotate(180deg);}
+
+  /* ---------- About strip ---------- */
+  .about{padding:80px 0;}
+  .about-grid{display:grid; grid-template-columns:220px 1fr; gap:44px; align-items:center;}
+  .avatar-ring{
+    width:190px; height:190px; border-radius:50%;
+    background:linear-gradient(135deg, var(--indigo), var(--coral), var(--amber));
+    padding:6px;
+  }
+  .avatar-ring .avatar{
+    width:100%; height:100%; border-radius:50%; background:var(--surface);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:800; font-size:52px; color:var(--indigo);
+    overflow:hidden;
+  }
+  .avatar-ring .avatar img{
+    width:100%; height:100%; object-fit:cover; border-radius:50%;
+  }
+  .about-text p{color:var(--muted); font-size:15.5px; margin-bottom:12px; max-width:600px;}
+  .about-text strong{color:var(--ink);}
+  @media (max-width:700px){ .about-grid{grid-template-columns:1fr; text-align:center;} .avatar-ring{margin:0 auto;} }
+
+  /* ---------- Contact ---------- */
+  .contact{padding:90px 0 70px; background:linear-gradient(180deg, #F7F7FF, #fff);}
+  .contact-shell{
+    display:grid; grid-template-columns:0.85fr 1.15fr; gap:36px;
+    background:var(--surface); border:1px solid var(--line); border-radius:26px;
+    padding:44px; box-shadow:0 20px 50px rgba(30,20,70,0.06);
+  }
+  .contact-info-card{
+    display:flex; gap:14px; align-items:flex-start; margin-bottom:28px;
+  }
+  .contact-info-card:last-child{margin-bottom:0;}
+  .contact-info-card .icon-tile{width:44px; height:44px; border-radius:12px; font-size:19px; margin-bottom:0; flex-shrink:0;}
+  .contact-info-card h4{font-size:15.5px; margin-bottom:4px;}
+  .contact-info-card p, .contact-info-card a{font-size:14px; color:var(--muted);}
+  .contact-info-card a:hover{color:var(--indigo);}
+
+  .contact-form{display:grid; gap:14px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .contact-form input, .contact-form textarea{
+    width:100%; border:1px solid var(--line); background:#F9F9FF; border-radius:12px;
+    padding:13px 16px; font-family:var(--sans); font-size:14px; color:var(--ink);
+    outline:none; transition:border-color .15s, background .15s;
+  }
+  .contact-form input:focus, .contact-form textarea:focus{border-color:var(--indigo); background:#fff;}
+  .contact-form textarea{resize:vertical; min-height:110px;}
+  .form-submit{
+    justify-self:start; border:none; cursor:pointer;
+    background:linear-gradient(120deg, var(--indigo), var(--coral));
+    color:#fff; font-family:var(--sans); font-weight:700; font-size:14.5px;
+    padding:13px 28px; border-radius:30px; transition:transform .15s, box-shadow .15s;
+  }
+  .form-submit:hover{transform:translateY(-2px); box-shadow:0 12px 26px rgba(75,79,224,0.3);}
+
+  .social-row{display:flex; justify-content:center; gap:14px; margin-top:44px;}
+  .social-icon{
+    width:44px; height:44px; border-radius:50%; background:var(--surface);
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    color:var(--ink); transition:transform .15s, background .15s, color .15s;
+  }
+  .social-icon:hover{background:var(--indigo); color:#fff; transform:translateY(-3px);}
+  .social-icon svg{width:19px; height:19px;}
+
+  @media (max-width:820px){
+    .contact-shell{grid-template-columns:1fr; padding:30px 24px;}
+    .form-row{grid-template-columns:1fr;}
+  }
+
+  footer{text-align:center; padding:26px; font-size:13px; color:var(--muted);}
+
+  @media (max-width:760px){
+    .services, .projects, .about, .contact{padding:60px 0;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><span class="dot"></span>Nezam Kutubi</div>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="#contact">Hire Me</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Android App Developer</span>
+      <h1>I build <span class="hl">Android apps</span> that people actually enjoy using.</h1>
+      <p class="lead">
+        Native Android development with Kotlin and Jetpack Compose — from first
+        wireframe to a published, working app on the Play Store.
+      </p>
+      <div class="btn-row">
+        <a class="btn primary" href="#projects">See my work</a>
+        <a class="btn outline" href="#contact">Get in touch</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b>8</b><span>Apps Built</span></div>
+        <div class="stat"><b>Kotlin</b><span>& Compose</span></div>
+        <div class="stat"><b>1</b><span>In Closed Testing</span></div>
+      </div>
+    </div>
+    <div class="desk-stage">
+      <div class="desk-scene">
+        <div class="wall-window"></div>
+        <div class="shelf"></div>
+        <div class="lamp"></div>
+        <div class="plant-leaf"></div>
+        <div class="plant-leaf"></div>
+        <div class="plant-leaf"></div>
+        <div class="plant-pot"></div>
+        <div class="desk-top"></div>
+        <div class="monitor">
+          <div class="monitor-screen">
+            <div class="code-line w1"></div>
+            <div class="code-line w2"></div>
+            <div class="code-line w3"></div>
+            <div class="code-line w4"></div>
+            <div class="code-line w5"></div>
+          </div>
+        </div>
+        <div class="monitor-stand"></div>
+        <div class="person">
+          <div class="head"></div>
+          <div class="body"></div>
+        </div>
+        <div class="keyboard"></div>
+        <div class="mug"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="avatar-ring"><div class="avatar">
+      <!-- <span>NK</span> -->
+      <img src="profile.jpg" alt="Nezam Kutubi">
+    </div></div>
+    <div class="about-text">
+      <span class="eyebrow">About Me</span>
+      <p>
+        I got my start writing <strong>Java and XML</strong> for Android the
+        self-directed way — building real projects and learning the platform
+        from the inside. That foundation is now carrying me through a move to
+        <strong>Kotlin and Jetpack Compose</strong>, with modern architecture:
+        MVVM, Hilt for DI, and Coroutines/Flow for async work.
+      </p>
+      <p>
+        I care about apps that are genuinely useful, not just technically
+        sound — and I'm building toward a career combining solid Android
+        fundamentals with practical monetization strategy.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Our Services</span>
+      <h2>What I can build for you</h2>
+      <p>End-to-end Android development, from idea to Play Store — handled by one focused developer.</p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="icon-tile c1">📱</div>
+        <h3>Android App Development</h3>
+        <p>Full native apps built with Kotlin — clean architecture, from concept through a working release.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon-tile c2">🎨</div>
+        <h3>Jetpack Compose UI</h3>
+        <p>Modern, smooth interfaces built with Compose — no more clunky legacy XML layouts.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon-tile c3">🛠️</div>
+        <h3>Maintenance & Bug Fixes</h3>
+        <p>Ongoing support for existing apps — performance fixes, updates, and Play Store compliance.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon-tile c4">💰</div>
+        <h3>Monetization Setup</h3>
+        <p>AdMob integration done right — banner, interstitial, and rewarded ads without hurting UX.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Featured Projects</span>
+      <h2>A few things I've built</h2>
+      <p>One live project in testing, plus demo apps built to practice and showcase Compose patterns.</p>
+    </div>
+    <div class="project-grid">
+
+      <div class="proj-card">
+        <div class="proj-shot greal1">
+          <div class="mini-phone">
+            <img class="real-shot" src="project-news-app.jpg" alt="News feed app screenshot">
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>সংবাদ প্রতিদিন — News Feed App</h3>
+          <p>A Bengali news feed UI built to practice category tabs, breaking-news cards, and list-heavy Compose layouts.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">LazyColumn</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot greal2">
+          <div class="mini-phone">
+            <img class="real-shot" src="project-bmi-app.jpg" alt="BMI calculator app screenshot">
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>BMI Calculator</h3>
+          <p>A health utility app practicing input validation, live state updates, and a custom BMI-range indicator.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">State</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot greal3">
+          <div class="mini-phone">
+            <img class="real-shot" src="project-notes-app.jpg" alt="Notes app screenshot">
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>My Notes — Notes App</h3>
+          <p>A colour-coded notes app exploring Room-backed CRUD, checklist notes, and a favourites filter.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">Room DB</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="project-grid extra-projects" id="extra-projects">
+
+      <div class="proj-card">
+        <div class="proj-shot g1">
+          <div class="mini-phone">
+            <div class="mscreen narco">
+              <div class="mtitle">NarcoGuide</div>
+              <div class="mbody">
+                <div class="mrow"><div class="mchip" style="background:#2D6A4F;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#40916C;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#74C69D;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge testing">● In Closed Testing</span>
+          <h3>NarcoGuide</h3>
+          <p>A reference app covering Bangladesh's narcotics control laws, penalties, and rehabilitation resources.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">Room DB</span>
+          </div>
+          <a class="proj-link" href="#" target="_blank" rel="noopener">View on GitHub →</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot g2">
+          <div class="mini-phone">
+            <div class="mscreen task">
+              <div class="mtitle">TaskFlow</div>
+              <div class="mbody">
+                <div class="mrow"><div class="mchip" style="background:#4B4FE0;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#7B7EEF;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#A5A8F5;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>TaskFlow — To-Do App</h3>
+          <p>A daily task manager built to practice Compose state management and local persistence.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">MVVM</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot g3">
+          <div class="mini-phone">
+            <div class="mscreen budget">
+              <div class="mtitle">PocketBudget</div>
+              <div class="mbody">
+                <div class="mrow"><div class="mchip" style="background:#FF6F59;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#FF9A85;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#FFC3B5;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>PocketBudget — Expense Tracker</h3>
+          <p>A simple expense tracker exploring Room database design and category-based charts.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Room</span>
+            <span class="tag">Charts</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot g4">
+          <div class="mini-phone">
+            <div class="mscreen weather">
+              <div class="mtitle">WeatherNow</div>
+              <div class="mbody">
+                <div class="mrow"><div class="mchip" style="background:#3FA9F5;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#7CC6F7;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#B7E1FB;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>WeatherNow — Forecast App</h3>
+          <p>A weather app built to practice Retrofit API calls, Coroutines, and mapping JSON responses to Compose UI.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Retrofit</span>
+            <span class="tag">Coroutines</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-shot g5">
+          <div class="mini-phone">
+            <div class="mscreen fit">
+              <div class="mtitle">FitTrack</div>
+              <div class="mbody">
+                <div class="mrow"><div class="mchip" style="background:#22C58B;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#6EE0B4;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+                <div class="mrow"><div class="mchip" style="background:#B3F0D8;"></div><div style="flex:1;"><div class="mline w70"></div><div class="mline w45"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <span class="badge demo">Demo Project</span>
+          <h3>FitTrack — Workout Logger</h3>
+          <p>A workout logger exploring Room-backed history tracking and simple progress charts in Compose.</p>
+          <div class="tag-row">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Room</span>
+            <span class="tag">Compose</span>
+          </div>
+          <p class="demo-note">Personal practice project.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="see-more-wrap">
+      <button class="btn see-more" id="see-more-btn" type="button" onclick="toggleExtraProjects()">
+        <span id="see-more-label">See More Projects</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleExtraProjects(){
+    var extra = document.getElementById('extra-projects');
+    var btn = document.getElementById('see-more-btn');
+    var label = document.getElementById('see-more-label');
+    var isOpen = extra.classList.contains('is-open');
+    if(isOpen){
+      extra.classList.remove('is-open');
+      extra.style.display = 'none';
+      btn.classList.remove('open');
+      label.textContent = 'See More Projects';
+    } else {
+      extra.classList.add('is-open');
+      extra.style.display = 'grid';
+      btn.classList.add('open');
+      label.textContent = 'See Less';
+    }
+  }
+</script>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Find Us</span>
+      <h2>Contact Us</h2>
+      <p>Open to freelance projects, collaborations, and full-time opportunities.</p>
+    </div>
+
+    <div class="contact-shell">
+      <div class="contact-info">
+        <div class="contact-info-card">
+          <div class="icon-tile c1">📞</div>
+          <div>
+            <h4>Call Us</h4>
+            <p>+880 1825 800 636</p>
+          </div>
+        </div>
+        <div class="contact-info-card">
+          <div class="icon-tile c2">✉️</div>
+          <div>
+            <h4>Email Us</h4>
+            <a href="mailto:nkutubi64@gmail.com">nkutubi64@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-info-card">
+          <div class="icon-tile c3">📍</div>
+          <div>
+            <h4>Address</h4>
+            <p>Chattogram, Bangladesh</p>
+          </div>
+        </div>
+      </div>
+
+      <form class="contact-form" action="https://formspree.io/f/xeeygjna" method="POST">
+        <div class="form-row">
+          <input type="text" name="name" placeholder="Name" required>
+          <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <input type="text" name="subject" placeholder="Subject">
+        <textarea name="message" placeholder="Message" required></textarea>
+        <button class="form-submit" type="submit">Send Message</button>
+      </form>
+    </div>
+
+    <div class="social-row">
+      <a class="social-icon" href="https://www.facebook.com/share/1Eidhxp7by/" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.6h2.55l.38-2.96h-2.93V8.53c0-.86.24-1.44 1.47-1.44h1.57V4.46c-.27-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9v2.2H7.99v2.96h2.47V21h3.04Z"/></svg>
+      </a>
+      <a class="social-icon" href="https://www.instagram.com/nezam_kutubi" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.72 0 3.06.01 4.12.06 1.06.05 1.79.22 2.43.47.66.26 1.22.6 1.77 1.15.5.5.87 1.05 1.15 1.77.25.64.42 1.37.47 2.43.05 1.06.06 1.4.06 4.12s-.01 3.06-.06 4.12c-.05 1.06-.22 1.79-.47 2.43a4.9 4.9 0 0 1-1.15 1.77c-.5.5-1.05.87-1.77 1.15-.64.25-1.37.42-2.43.47C15.06 22 14.72 22 12 22s-3.06-.01-4.12-.06c-1.06-.05-1.79-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.64-.42-1.37-.47-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.06.22-1.79.47-2.43.26-.66.6-1.22 1.15-1.77a4.9 4.9 0 0 1 1.77-1.15c.64-.25 1.37-.42 2.43-.47C8.94 2.01 9.28 2 12 2Zm0 1.8c-2.67 0-2.99.01-4.04.06-.87.04-1.34.18-1.65.3-.42.16-.71.36-1.02.67-.31.31-.5.6-.67 1.02-.12.31-.26.78-.3 1.65-.05 1.05-.06 1.37-.06 4.04s.01 2.99.06 4.04c.04.87.18 1.34.3 1.65.16.42.36.71.67 1.02.31.31.6.5 1.02.67.31.12.78.26 1.65.3 1.05.05 1.37.06 4.04.06s2.99-.01 4.04-.06c.87-.04 1.34-.18 1.65-.3.42-.16.71-.36 1.02-.67.31-.31.5-.6.67-1.02.12-.31.26-.78.3-1.65.05-1.05.06-1.37.06-4.04s-.01-2.99-.06-4.04c-.04-.87-.18-1.34-.3-1.65a2.7 2.7 0 0 0-.67-1.02 2.7 2.7 0 0 0-1.02-.67c-.31-.12-.78-.26-1.65-.3C14.99 3.81 14.67 3.8 12 3.8Zm0 3.35a4.85 4.85 0 1 1 0 9.7 4.85 4.85 0 0 1 0-9.7Zm0 1.8a3.05 3.05 0 1 0 0 6.1 3.05 3.05 0 0 0 0-6.1Zm5.04-1.99a1.13 1.13 0 1 1-2.26 0 1.13 1.13 0 0 1 2.26 0Z"/></svg>
+      </a>
+      <a class="social-icon" href="https://bd.linkedin.com/in/nezam-kutubi-160624258" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/></svg>
+      </a>
+      <a class="social-icon" href="https://x.com/NezamKutubi" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2.5h3.2l-7 8 8.2 11h-6.4l-5-6.7-5.7 6.7H2l7.5-8.6-7.9-10.4h6.5l4.5 6.1 5.8-6.1Zm-1.1 17h1.8L7.3 4.4H5.4l12.4 15.1Z"/></svg>
+      </a>
+      <a class="social-icon" href="#" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.93c.57.1.78-.25.78-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.68.42.36.78 1.07.78 2.16v3.2c0 .3.2.66.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Nezam Kutubi — All rights reserved.</footer>
+
+</body>
+</html>
